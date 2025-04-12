@@ -111,6 +111,7 @@ def get_parsed_content_icon(filtered_boxes, starting_idx, image_source, caption_
             inputs = processor(images=batch, text=[prompt]*len(batch), return_tensors="pt", do_resize=False).to(device=device, dtype=torch.float16)
         else:
             inputs = processor(images=batch, text=[prompt]*len(batch), return_tensors="pt").to(device=device)
+        inputs["pixel_values"] = inputs["pixel_values"].half()
         if 'florence' in model.config.name_or_path:
             generated_ids = model.generate(input_ids=inputs["input_ids"],pixel_values=inputs["pixel_values"],max_new_tokens=20,num_beams=1, do_sample=False)
         else:
